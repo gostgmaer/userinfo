@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
   baseURL,
 });
 
-export const get = async (endpint,id,data,query) => {
+export const get = async (endpint,id,query) => {
   let  recordID,reqUrl = undefined
   if (recordID) {
     reqUrl=baseURL + endpint+`/${id}`
@@ -16,13 +16,11 @@ export const get = async (endpint,id,data,query) => {
   if (!recordID) {
     reqUrl=baseURL + endpint
   }
- 
   const option = {
     method: "get",
     url: reqUrl,
     headers: {},
-    params: query,
-    data: data,
+    params: query
   };
   let response;
   let error;
