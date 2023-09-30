@@ -1,5 +1,6 @@
 // utils/axiosApi.js
 import axios from "axios";
+import { notifySuccess, notifyerror } from "./notify/notice";
 
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL; // Replace with your Firebase URL
 
@@ -7,15 +8,34 @@ const axiosInstance = axios.create({
   baseURL,
 });
 
-export const get = async (endpoint, queryParams) => {
-  try {
-    const response = await axiosInstance.get(endpoint + ".json", {
-      params: queryParams,
-    });
-    return response.data;
-  } catch (error) {
-    throw error;
+export const get = async (endpint,id,data,query) => {
+  let  recordID,reqUrl = undefined
+  if (recordID) {
+    reqUrl=baseURL + endpint+`/${id}`
   }
+  if (!recordID) {
+    reqUrl=baseURL + endpint
+  }
+ 
+  const option = {
+    method: "get",
+    url: reqUrl,
+    headers: {},
+    params: query,
+    data: data,
+  };
+  let response;
+  let error;
+  try {
+    response = await axios.request(option);
+    notifySuccess(response.data.message, 2000);
+    console.log(response);
+  } catch (e) {
+    error = e.response.data;
+    notifyerror(e.response.data.message, 2000);
+    throw new Error(JSON.stringify(e.response.data));
+  }
+  return response?.data ? response?.data : error; // or set initial value
 };
 
 export const getSingleRecord = async (endpoint, id) => {
@@ -27,22 +47,50 @@ export const getSingleRecord = async (endpoint, id) => {
   }
 };
 
-export const post = async (url, data) => {
+export const post = async (endpint, data) => {
+  const option = {
+    method: "post",
+    url: baseURL + endpint,
+    headers: {},
+    params: {},
+    data: data,
+  };
+  let response;
+  let error;
   try {
-    const response = await axiosInstance.post(url, data);
-    return response.data;
-  } catch (error) {
-    throw error;
+    response = await axios.request(option);
+    notifySuccess(response.data.message, 2000);
+    console.log(response);
+  } catch (e) {
+    error = e.response.data;
+    notifyerror(e.response.data.message, 2000);
+    throw new Error(JSON.stringify(e.response.data));
   }
+
+  // if success return value
+  return response?.data ? response?.data : error; // or set initial value
 };
 
-export const put = async (url, data) => {
+export const put = async (endpint,id,data) => {
+  const option = {
+    method: "put",
+    url: baseURL + endpint+`/${id}`,
+    headers: {},
+    params: {},
+    data: data,
+  };
+  let response;
+  let error;
   try {
-    const response = await axiosInstance.put(url, data);
-    return response.data;
-  } catch (error) {
-    throw error;
+    response = await axios.request(option);
+    notifySuccess(response.data.message, 2000);
+    console.log(response);
+  } catch (e) {
+    error = e.response.data;
+    notifyerror(e.response.data.message, 2000);
+    throw new Error(JSON.stringify(e.response.data));
   }
+  return response?.data ? response?.data : error; // or set initial value
 };
 
 export const del = async (url) => {
