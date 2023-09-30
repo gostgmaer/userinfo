@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -11,6 +11,11 @@ const Signup = () => {
     e.preventDefault();
   };
 
+  const handleGoogleLogin = async () => {};
+
+  const responseFacebook = (response) => {
+    console.log(response);
+  };
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-96 text-black">
@@ -61,6 +66,22 @@ const Signup = () => {
             </button>
           </div>
         </form>
+        <div className="flex flex-col gap-2">
+          <h3>Register with Social media</h3>
+          <div className="mb-4 flex gap-2">
+            <button
+              onClick={handleGoogleLogin}
+              className="w-full bg-red-600 text-white font-semibold py-2 rounded-md hover:bg-red-700 focus:outline-none focus:bg-red-700"
+            >
+              Google
+            </button>
+            <button className="w-full bg-blue-800 text-white font-semibold py-2 rounded-md hover:bg-blue-900 focus:outline-none focus:bg-blue-900">
+              {" "}
+              Facebook
+            </button>
+          </div>
+        </div>
+
         <p className="text-gray-700">
           Already have an account?{" "}
           <Link href="/login" className="text-blue-500 hover:underline">
