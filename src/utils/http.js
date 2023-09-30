@@ -27,9 +27,9 @@ export const getSingleRecord = async (endpoint, id) => {
   }
 };
 
-export const post = async (url, data) => {
+export const post = async (endpint, data) => {
   try {
-    const response = await axiosInstance.post(url, data);
+    const response = await axiosInstance.post(endpint, data);
     return response.data;
   } catch (error) {
     throw error;
