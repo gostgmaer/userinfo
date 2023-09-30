@@ -23,8 +23,6 @@ const AppProvider = ({ children }) => {
     setLoader(true);
   };
 
-
-
   return (
     <AppContext.Provider
       value={{

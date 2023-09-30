@@ -1,19 +1,17 @@
 "use client"
-import Image from "next/image";
-import React from "react";
+import Personal from "@/components/Pages/private/Profile";
+import { useAuthContext } from "@/context/authContext";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 
 const Profile = () => {
+  const { authenticated,user } = useAuthContext();
+  const router = useRouter();
+  useEffect(() => {
+    if (user) router.push("/login");
+  }, [user]);
   return (
-    <div className="container mx-auto py-8 text-black">
-      <h1 className="text-3xl font-semibold mb-4">My Profile</h1>
-      <Image
-        width={100}
-        height={100}
-        src={"https://source.unsplash.com/random"}
-        style={{ borderRadius: "50%", height: "100px" }}
-        alt=""
-      />
-    </div>
+    <Personal/>
   );
 };
 

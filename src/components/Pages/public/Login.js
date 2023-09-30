@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import PasswordField from "@/components/global/fields/PasswordField";
 import { post } from "@/utils/http";
 import { useAuthContext } from "@/context/authContext";
 const Login = () => {
-  const {handleLoginAuth,user} = useAuthContext()
+  const {handleLoginAuth,user,authenticated} = useAuthContext()
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -27,11 +27,8 @@ const Login = () => {
     };
 
    try {
-    const res = await handleLoginAuth(body);
-    if (res) {
-      router.push('/profile')
-    }
-    console.log(res);
+     await handleLoginAuth(body);
+   
    } catch (error) {
    }
   };
@@ -40,6 +37,13 @@ const Login = () => {
   const responseFacebook = (response) => {
     console.log(response);
   };
+
+  useEffect(() => {
+    if (user) {
+      router.push('/profile')
+    }
+  }, [user]);
+
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-96 text-black">
