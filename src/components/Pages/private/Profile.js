@@ -1,7 +1,7 @@
 "use client";
 import ImageUpload from "@/components/global/fields/ImageUpload";
 import { useAuthContext } from "@/context/authContext";
-import { get } from "@/utils/http";
+import { get, put } from "@/utils/http";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
@@ -26,11 +26,11 @@ const Personal = () => {
     <div className="container mx-auto py-8 text-black">
       <div className=" flex justify-between items-center">
         <h1 className="text-3xl font-semibold mb-4">My Profile</h1>
-        {profileInfo?.profilePicture && (
+        {profileInfo?.result?.profilePicture && (
           <Image
             width={100}
             height={100}
-            src={"https://source.unsplash.com/random"}
+            src={profileInfo.result.profilePicture}
             style={{ borderRadius: "50%", height: "100px" }}
             alt=""
           />
@@ -40,7 +40,7 @@ const Personal = () => {
         <UserprofileDetails userData={profileInfo.result} setClose={setClose} />
       )}
       {!close && profileInfo && (
-        <UserProfile data={profileInfo.result} setClose={setClose} />
+        <UserProfile data={profileInfo.result} setClose={setClose} setProfileInfo={setProfileInfo} />
       )}
     </div>
   );
@@ -48,26 +48,62 @@ const Personal = () => {
 
 export default Personal;
 
-const UserProfile = ({ data, setClose }) => {
-  const [formData, setFormData] = useState(data);
+const UserProfile = ({ data, setClose,setProfileInfo }) => {
+  const { user } = useAuthContext();
+  const [formData, setFormData] = useState({
+    firstName: data.firstName,
+    lastName: data.lastName,
+    profilePicture: data.profilePicture,
+    contactNumber: data.contactNumber,
+    address: {
+      street: data.address.street,
+      city: data.address.city,
+      state: data.address.state,
+      postalCode: data.address.postalCode,
+      country: data.address.country,
+    },
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     // setResume({ ...resume, [name]: value });
   };
-
-  const address = data.address;
   const [imagePreview, setimagePreview] = useState(data?.profilePicture);
+
+  const UpdateProfile = async (e) => {
+    e.preventDefault();
+    console.log(formData, imagePreview);
+    const recordData = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      profilePicture: imagePreview,
+      contactNumber: formData.contactNumber,
+      address: {
+        street: formData.street,
+        city: formData.city,
+        state: formData.state,
+        postalCode: formData.postalCode,
+        country: formData.country,
+      },
+     
+    };
+    const res= await put(`/users`,user.user.user_id,recordData)
+    if (res) {
+      setClose(true)
+      const userInfoDaa = await get(`/profile/${user.user.user_id}`, null, {});
+      setProfileInfo(userInfoDaa);
+    }
+   
+  };
   return (
     <form className="bg-gray-50 p-4 rounded-lg shadow-md">
       <div className=" flex justify-between items-center">
         {" "}
         <h2 className="text-2xl font-semibold mb-4">Basic Info</h2>{" "}
         <button className="text-red-500 hover:text-red-700 cursor-pointer">
-      <MdClose size={24}  onClick={() => setClose(true)} />
-    </button>
-      
+          <MdClose size={24} onClick={() => setClose(true)} />
+        </button>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -83,7 +119,6 @@ const UserProfile = ({ data, setClose }) => {
             name="firstName"
             id="firstName"
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-            readOnly
             value={formData.firstName}
             onChange={handleChange}
           />
@@ -101,7 +136,6 @@ const UserProfile = ({ data, setClose }) => {
             name="lastName"
             id="lastName"
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-            readOnly
             value={formData.lastName}
             onChange={handleChange}
           />
@@ -149,7 +183,6 @@ const UserProfile = ({ data, setClose }) => {
             name="street"
             id="street"
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-            readOnly
             value={formData.address.street}
             onChange={handleChange}
           />
@@ -167,7 +200,6 @@ const UserProfile = ({ data, setClose }) => {
             name="city"
             id="city"
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-            readOnly
             value={formData.address.city}
             onChange={handleChange}
           />
@@ -185,7 +217,6 @@ const UserProfile = ({ data, setClose }) => {
             name="state"
             id="state"
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-            readOnly
             value={formData.address.state}
             onChange={handleChange}
           />
@@ -203,7 +234,6 @@ const UserProfile = ({ data, setClose }) => {
             name="postalCode"
             id="postalCode"
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-            readOnly
             value={formData.address.postalCode}
             onChange={handleChange}
           />
@@ -221,7 +251,6 @@ const UserProfile = ({ data, setClose }) => {
             name="country"
             id="country"
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-500"
-            readOnly
             value={formData.address.country}
             onChange={handleChange}
           />
@@ -230,6 +259,7 @@ const UserProfile = ({ data, setClose }) => {
       <div className="col-span-1 mt-4 flex justify-end">
         <button
           type="button"
+          onClick={UpdateProfile}
           className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
         >
           Save Details
