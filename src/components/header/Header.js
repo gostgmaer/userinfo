@@ -17,21 +17,30 @@ function Header() {
     <header className="bg-blue-500 p-4">
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo */}
-        <div className="text-white text-2xl font-bold">Your Logo</div>
+        <Link href={"/"} className="text-white text-2xl font-bold">
+          Your Logo
+        </Link>
 
         {/* Navigation */}
         <nav className="space-x-4">
           {/* My Profile Link */}
-          <a href="/profile" className="text-white hover:text-gray-200">
+          <Link href="/profile" className="text-white hover:text-gray-200">
             My Profile
-          </a>
+          </Link>
           {/* Sign In Button */}
-          <button className="text-white hover:text-gray-200">Sign In</button>
+          <Link href={"/login"} className="text-white hover:text-gray-200">
+            Sign In
+          </Link>
           {/* Sign Up Button */}
-          <button className="bg-white text-blue-500 hover:bg-blue-400 text-white hover:text-gray-800 rounded-full py-2 px-6 transition duration-300">
+          <Link
+            href={"/register"}
+            className="bg-white text-blue-500 hover:bg-blue-400 hover:text-gray-800 rounded-full py-2 px-6 transition duration-300"
+          >
             Sign Up
+          </Link>
+          <button className="bg-red-500 hover:bg-red-400 text-white hover:text-gray-800 rounded-full py-2 px-6 transition duration-300">
+            Sign Out
           </button>
-          <button className="bg-red-500 hover:bg-red-400 text-white hover:text-gray-800 rounded-full py-2 px-6 transition duration-300">Sign Out</button>
         </nav>
       </div>
     </header>
