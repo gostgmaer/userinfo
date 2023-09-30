@@ -1,7 +1,7 @@
 "use client";
-import Features from "@/components/Pages/HomePage/Feature";
-import HeroSection from "@/components/Pages/HomePage/Hero";
-import Testimonials from "@/components/Pages/HomePage/Testimonials";
+import Features from "@/components/Pages/public/HomePage/Feature";
+import HeroSection from "@/components/Pages/public/HomePage/Hero";
+import Testimonials from "@/components/Pages/public/HomePage/Testimonials";
 import { useAuthContext } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
