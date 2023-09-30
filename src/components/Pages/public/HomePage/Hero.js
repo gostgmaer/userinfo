@@ -9,7 +9,7 @@ function HeroSection() {
         <p className="text-lg text-gray-600 mb-6">
           Build a professional resume in minutes with our easy-to-use builder.
         </p>
-        <Link href={'/resume-builder'} className="mt-6 px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-full text-lg font-semibold transition duration-300">
+        <Link href={'/profile'} className="mt-6 px-8 py-4 bg-blue-500 hover:bg-blue-600 text-white rounded-full text-lg font-semibold transition duration-300">
           Get Started
         </Link>
       </div>

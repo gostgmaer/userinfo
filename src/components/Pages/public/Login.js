@@ -3,7 +3,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import PasswordField from "@/components/global/fields/PasswordField";
+import { post } from "@/utils/http";
+import { useAuthContext } from "@/context/authContext";
 const Login = () => {
+  const {handleLoginAuth,user} = useAuthContext()
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -18,7 +21,19 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    const body = {
+      email: formData.email,
+      password: formData.password
+    };
+
+   try {
+    const res = await handleLoginAuth(body);
+    if (res) {
+      router.push('/profile')
+    }
+    console.log(res);
+   } catch (error) {
+   }
   };
   const handleGoogleLogin = async () => {};
 
@@ -29,7 +44,7 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-96 text-black">
         <h2 className="text-2xl font-semibold mb-4">Login</h2>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} action="post">
           <div className="mb-4 text-black">
             <label
               htmlFor="email"
