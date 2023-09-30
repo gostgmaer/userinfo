@@ -62,7 +62,7 @@ const Login = () => {
               name={"password"}
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 mt-10">
             <button
               type="submit"
               className="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"

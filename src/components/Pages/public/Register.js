@@ -14,6 +14,7 @@ const Signup = () => {
     confirm_password: "",
     username: "",
   });
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,10 +25,22 @@ const Signup = () => {
   const handleRegistration = async (e) => {
     e.preventDefault();
     console.log(formData);
-    const body = {};
-    // try {
-    //   const res = post("signup");
-    // } catch (error) {}
+
+    const body = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+      username: formData.username,
+    };
+
+   try {
+    const res = await post("/signup", body);
+    console.log(res);
+   } catch (error) {
+    setError(error)
+    console.log(error);
+   }
   };
 
   const handleGoogleLogin = async () => {};
@@ -37,7 +50,9 @@ const Signup = () => {
   };
   return (
     <div className="min-h-screen flex items-center justify-center">
+   
       <div className="bg-white p-8 rounded-lg shadow-md w-100 text-black">
+      
         <h2 className="text-2xl font-semibold mb-4">Sign Up</h2>
         <form onSubmit={handleRegistration} className="text-black">
           <div className="mb-4 flex gap-5">
@@ -146,7 +161,7 @@ const Signup = () => {
               />
             </div>
           </div>
-          <div className="mb-4">
+          <div className="mb-4  mt-10">
             <button
               type="submit"
               className="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"

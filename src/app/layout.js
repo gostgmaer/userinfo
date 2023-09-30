@@ -4,6 +4,7 @@ import { Roboto } from "next/font/google";
 import Footer from "@/components/footer/Footer";
 import { AppProvider } from "@/context/context";
 import { AuthContextProvider } from "@/context/authContext";
+import { ToastContainer } from "react-toastify";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
             <main className=" bg-slate-50 min-h-screen text-black">{children}</main>
             <Footer />
           </AuthContextProvider>
+          <ToastContainer/>
         </body>
       </html>
     </AppProvider>
