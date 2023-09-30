@@ -6,7 +6,8 @@ import PasswordField from "@/components/global/fields/PasswordField";
 import { post } from "@/utils/http";
 import { useAuthContext } from "@/context/authContext";
 const Login = () => {
-  const {handleLoginAuth,user,authenticated} = useAuthContext()
+  // @ts-ignore
+  const {handleLoginAuth,user} = useAuthContext()
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",

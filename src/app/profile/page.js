@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const Profile = () => {
-  const { authenticated,user } = useAuthContext();
+  // @ts-ignore
+  const { user } = useAuthContext();
   const router = useRouter();
   useEffect(() => {
-    if (user) router.push("/login");
+    if (!user) router.push("/login");
   }, [user]);
   return (
     <Personal/>
