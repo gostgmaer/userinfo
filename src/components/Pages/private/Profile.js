@@ -11,7 +11,7 @@ const Personal = () => {
   const [profileInfo, setProfileInfo] = useState(undefined);
   const [close, setClose] = useState(true);
 
-  const getProfile = async (params) => {
+  const getProfile = async () => {
     try {
       const res = await get(`/profile/${user.user.user_id}`, null, {});
       setProfileInfo(res);
@@ -20,7 +20,7 @@ const Personal = () => {
 
   useEffect(() => {
     getProfile();
-  }, [user]);
+  }, [user?.user?.user_id]);
 
   return (
     <div className="container mx-auto py-8 text-black">
@@ -374,3 +374,26 @@ const UserprofileDetails = ({ userData, setClose }) => {
     </div>
   );
 };
+
+
+export async function getServerSideProps(props) {
+
+  console.log(props);
+  // try {
+  // //  const data = await get(`/profile/${user.user.user_id}`, null, {}); // Fetch your data here
+  //   return {
+  //     props: {
+  //       data,
+  //     },
+  //   };
+  // } catch (error) {
+  //   console.error('Error fetching data:', error);
+  //   return {
+  //     props: {
+  //       data: null,
+  //     },
+  //   };
+  // }
+}
+
+
