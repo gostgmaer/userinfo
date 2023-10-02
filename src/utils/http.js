@@ -7,6 +7,7 @@ const baseURL = process.env.NEXT_PUBLIC_BASE_URL; // Replace with your Firebase 
 const axiosInstance = axios.create({
   baseURL,
 });
+// axios.defaults.withCredentials=true
 
 export const get = async (endpint,id,query) => {
   let  recordID,reqUrl = undefined
@@ -27,7 +28,7 @@ export const get = async (endpint,id,query) => {
   try {
     response = await axios.request(option);
     notifySuccess(response.data.message, 2000);
-    console.log(response);
+  
   } catch (e) {
     error = e.response.data;
     notifyerror(e.response.data.message, 2000);
