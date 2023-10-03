@@ -50,7 +50,7 @@ export const AuthContextProvider = ({ children }) => {
   const unsubscribe = async () => {
     try {
       loaderTrue();
-      const res = await get("/verify");
+      const res = await get("/protected");
       if (res.token) {
         setCookie(null, "accessToken", res.token, {
           maxAge: 30 * 24 * 60 * 60, // 30 days
