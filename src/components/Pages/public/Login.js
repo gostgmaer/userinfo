@@ -7,7 +7,7 @@ import { post } from "@/utils/http";
 import { useAuthContext } from "@/context/authContext";
 const Login = () => {
   // @ts-ignore
-  const {handleLoginAuth,user} = useAuthContext()
+  const {handleLoginAuth,user,userId} = useAuthContext()
   const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
@@ -40,10 +40,10 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (userId) {
       router.push('/profile')
     }
-  }, [user]);
+  }, [userId]);
 
   return (
     <div className="min-h-screen flex items-center justify-center">

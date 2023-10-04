@@ -10,33 +10,37 @@ const axiosInstance = axios.create({
 });
 // axios.defaults.withCredentials=true
 
-export const get = async (endpint,id,query) => {
+export const get = async (endpint, id, query) => {
+  const token = Cookies.get("accessToken");
 
-  const token = Cookies.get('accessToken'); 
-
-
-  let  recordID,reqUrl = undefined
+  let recordID,
+    reqUrl = undefined;
   if (recordID) {
-    reqUrl=baseURL + endpint+`/${id}`
+    reqUrl = baseURL + endpint + `/${id}`;
   }
   if (!recordID) {
-    reqUrl=baseURL + endpint
+    reqUrl = baseURL + endpint;
   }
   const option = {
     method: "get",
     url: reqUrl,
-    headers: {Authorization:token},
-    params: query
+    headers: { Authorization: token },
+    params: query,
   };
   let response;
   let error;
   try {
     response = await axios.request(option);
-    notifySuccess(response.data.message, 2000);
-  
+
+    if (!endpint.includes("protected")) {
+      notifySuccess(response.data.message, 2000);
+    }
   } catch (e) {
     error = e.response.data;
-    notifyerror(e.response.data.message, 2000);
+    if (!endpint.includes("protected")) {
+      notifyerror(e.response.data.message, 2000);
+    }
+
     throw new Error(JSON.stringify(e.response.data));
   }
   return response?.data ? response?.data : error; // or set initial value
@@ -75,10 +79,10 @@ export const post = async (endpint, data) => {
   return response?.data ? response?.data : error; // or set initial value
 };
 
-export const put = async (endpint,id,data) => {
+export const put = async (endpint, id, data) => {
   const option = {
     method: "put",
-    url: baseURL + endpint+`/${id}`,
+    url: baseURL + endpint + `/${id}`,
     headers: {},
     params: {},
     data: data,

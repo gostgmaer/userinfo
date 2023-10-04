@@ -19,16 +19,19 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <AppProvider>
-      <html lang="en">
-        <body className={roboto.className}>
-          <AuthContextProvider>
+      <AuthContextProvider>
+        <html lang="en">
+          <body suppressHydrationWarning={true}  className={roboto.className}>
             <Header />
-            <main className=" bg-slate-50 min-h-screen text-black">{children}</main>
+            <main className=" bg-slate-50 min-h-screen text-black">
+              {children}
+            </main>
             <Footer />
-          </AuthContextProvider>
-          <ToastContainer/>
-        </body>
-      </html>
+
+            <ToastContainer />
+          </body>
+        </html>
+      </AuthContextProvider>
     </AppProvider>
   );
 }

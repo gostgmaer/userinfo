@@ -12,11 +12,13 @@ const Personal = () => {
   const [close, setClose] = useState(true);
 
   const getProfile = async () => {
-    console.log(userId);
+   
     try {
       const res = await get(`/profile/${userId.user_id}`, null, {});
       setProfileInfo(res);
-    } catch (error) {}
+    } catch (error) {
+
+    }
   };
 
   useEffect(() => {
@@ -31,6 +33,7 @@ const Personal = () => {
           <Image
             width={100}
             height={100}
+            property="false"
             src={profileInfo.result.profilePicture}
             style={{ borderRadius: "50%", height: "100px" }}
             alt=""
