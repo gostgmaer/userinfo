@@ -3,6 +3,8 @@ import { get, post } from "@/utils/http";
 import { parseCookies, setCookie } from "nookies";
 import React, { useState } from "react";
 import { useGlobalAppContext } from "./context";
+import jwt_decode from "jwt-decode";
+import { useRouter } from "next/navigation";
 
 export const AuthContext = React.createContext({});
 
@@ -11,34 +13,39 @@ export const useAuthContext = () => React.useContext(AuthContext);
 export const AuthContextProvider = ({ children }) => {
   const { loader, loaderFalse, loaderTrue } = useGlobalAppContext();
   const [user, setUser] = React.useState(undefined);
+  const [userId, setUserId] = useState(null);
   const [authenticated, setAuthenticated] = useState(undefined);
-
+  const router = useRouter();
   const handleLoginAuth = async (body) => {
     try {
       const res = await post("/signin", body);
       setCookie(null, "accessToken", res.token, {
-        maxAge: 30 * 24 * 60 * 60, // 30 days
+        maxAge: 24 * 60 * 60, // 30 days
         path: "/", // The cookie is accessible from the entire site
       });
       setUser(res);
+      setUserId(res.user);
+      router.push('/profile')
       return res;
     } catch (error) {}
   };
 
   const Logout = async () => {
-       function deleteCookie(name) {
-          document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-        }
+    function deleteCookie(name) {
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    }
     try {
       loaderTrue();
       const res = await post("/signout");
 
       if (res.message === "Success") {
         setAuthenticated(undefined);
+        sessionStorage.removeItem("user");
         deleteCookie("accessToken");
         window.sessionStorage.clear();
         window.localStorage.clear();
         setUser(undefined);
+        setUserId(undefined)
       }
 
       loaderFalse();
@@ -50,19 +57,20 @@ export const AuthContextProvider = ({ children }) => {
   const unsubscribe = async () => {
     try {
       loaderTrue();
-      const res = await get("/protected");
-      if (res.token) {
-        setCookie(null, "accessToken", res.token, {
-          maxAge: 30 * 24 * 60 * 60, // 30 days
-          path: "/", // The cookie is accessible from the entire site
-        });
-        //  setUser(res);
-        return res;
-      } else {
-        // setUser(null);
+      const cookies = parseCookies();
+      if (cookies.accessToken) {
+        const decodedToken = jwt_decode(cookies.accessToken);
+        setUserId(decodedToken);
+
+        if (decodedToken["user_id"]) {
+          const res = await get("/protected");
+          setUser(res);
+        }
       }
       loaderFalse();
     } catch (error) {
+      setUser(undefined);
+      setUserId(undefined)
       loaderFalse();
     }
   };
@@ -72,7 +80,7 @@ export const AuthContextProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, handleLoginAuth, authenticated, Logout }}
+      value={{ user, handleLoginAuth, authenticated, Logout, userId }}
     >
       {children}
     </AuthContext.Provider>

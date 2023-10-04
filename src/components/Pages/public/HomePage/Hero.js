@@ -5,11 +5,9 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 function HeroSection() {
-  const { authenticated,user } = useAuthContext();
+  const { authenticated,user,userId } = useAuthContext();
   const router = useRouter();
-  useEffect(() => {
-    if (user) router.push("/profile");
-  }, [user]);
+
 
   return (
     <section className="bg-white text-gray-900 py-16">
