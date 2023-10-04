@@ -7,20 +7,21 @@ import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 
 const Personal = () => {
-  const { user } = useAuthContext();
+  const { user,userId } = useAuthContext();
   const [profileInfo, setProfileInfo] = useState(undefined);
   const [close, setClose] = useState(true);
 
   const getProfile = async () => {
+    console.log(userId);
     try {
-      const res = await get(`/profile/${user.user.user_id}`, null, {});
+      const res = await get(`/profile/${userId.user_id}`, null, {});
       setProfileInfo(res);
     } catch (error) {}
   };
 
   useEffect(() => {
     getProfile();
-  }, [user?.user?.user_id]);
+  }, []);
 
   return (
     <div className="container mx-auto py-8 text-black">
@@ -49,7 +50,7 @@ const Personal = () => {
 export default Personal;
 
 const UserProfile = ({ data, setClose,setProfileInfo }) => {
-  const { user } = useAuthContext();
+  const { user,userId } = useAuthContext();
   const [formData, setFormData] = useState({
     firstName: data.firstName,
     lastName: data.lastName,
@@ -88,10 +89,10 @@ const UserProfile = ({ data, setClose,setProfileInfo }) => {
       },
      
     };
-    const res= await put(`/users`,user.user.user_id,recordData)
+    const res= await put(`/users`,userId.user_id,recordData)
     if (res) {
       setClose(true)
-      const userInfoDaa = await get(`/profile/${user.user.user_id}`, null, {});
+      const userInfoDaa = await get(`/profile/${userId.user_id}`, null, {});
       setProfileInfo(userInfoDaa);
     }
    

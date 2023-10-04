@@ -1,6 +1,7 @@
 // utils/axiosApi.js
 import axios from "axios";
 import { notifySuccess, notifyerror } from "./notify/notice";
+import Cookies from "js-cookie";
 
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL; // Replace with your Firebase URL
 
@@ -10,6 +11,10 @@ const axiosInstance = axios.create({
 // axios.defaults.withCredentials=true
 
 export const get = async (endpint,id,query) => {
+
+  const token = Cookies.get('accessToken'); 
+
+
   let  recordID,reqUrl = undefined
   if (recordID) {
     reqUrl=baseURL + endpint+`/${id}`
@@ -20,7 +25,7 @@ export const get = async (endpint,id,query) => {
   const option = {
     method: "get",
     url: reqUrl,
-    headers: {},
+    headers: {Authorization:token},
     params: query
   };
   let response;
