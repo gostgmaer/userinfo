@@ -6,11 +6,11 @@ import React, { useEffect } from "react";
 
 const Profile = () => {
   // @ts-ignore
-  const { user } = useAuthContext();
+  const { user,userId } = useAuthContext();
   const router = useRouter();
   useEffect(() => {
-    if (!user) router.push("/login");
-  }, [user]);
+    if (!userId) router.push("/login");
+  }, [userId?.user_id]);
   return (
     <Personal/>
   );
