@@ -28,8 +28,8 @@ export const AuthContextProvider = ({ children }) => {
         path: "/", // The cookie is accessible from the entire site
       });
       setUser(res);
-      setUserId(res.user);
-      router.push('/profile')
+      setUserId({ ...res.user, user_id: res.user._id });
+      router.push("/profile");
       return res;
     } catch (error) {}
   };
@@ -49,7 +49,7 @@ export const AuthContextProvider = ({ children }) => {
         window.sessionStorage.clear();
         window.localStorage.clear();
         setUser(undefined);
-        setUserId(undefined)
+        setUserId(undefined);
       }
 
       loaderFalse();
@@ -74,13 +74,13 @@ export const AuthContextProvider = ({ children }) => {
       loaderFalse();
     } catch (error) {
       setUser(undefined);
-      setUserId(undefined)
+      setUserId(undefined);
       loaderFalse();
     }
   };
   React.useEffect(() => {
     unsubscribe();
-  }, [user?.user?._id]);
+  }, []);
 
   return (
     <AuthContext.Provider

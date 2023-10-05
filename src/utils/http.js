@@ -11,10 +11,13 @@ const axiosInstance = axios.create({
 // axios.defaults.withCredentials=true
 
 const cookies = parseCookies();
-
+const token = cookies["accessToken"];
+const session = cookies["session"]
 export const get = async (endpint, id, query) => {
-  const token = cookies["accessToken"];
-  console.log(cookies);
+ 
+
+
+
   let recordID,
     reqUrl = undefined;
   if (recordID) {
@@ -27,8 +30,8 @@ export const get = async (endpint, id, query) => {
     method: "get",
     url: reqUrl,
     headers: {
-      Authorization: cookies["accessToken"],
-      session_id: cookies["session"],
+      Authorization: token,
+      session_id: session,
     },
     params: query,
   };
@@ -64,7 +67,10 @@ export const post = async (endpint, data) => {
   const option = {
     method: "post",
     url: baseURL + endpint,
-    headers: {},
+    headers:    {
+      Authorization: token,
+      session_id: session,
+    },
     params: {},
     data: data,
   };

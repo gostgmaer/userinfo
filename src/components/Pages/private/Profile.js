@@ -23,7 +23,7 @@ const Personal = () => {
 
   useEffect(() => {
     getProfile();
-  }, []);
+  }, [userId?.user_id]);
 
   return (
     <div className="container mx-auto py-8 text-black">

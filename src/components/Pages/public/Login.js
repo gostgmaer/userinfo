@@ -43,7 +43,7 @@ const Login = () => {
     if (userId) {
       router.push('/profile')
     }
-  }, [userId]);
+  }, [userId?.user_id]);
 
   return (
     <div className="min-h-screen flex items-center justify-center">
