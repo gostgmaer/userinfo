@@ -76,7 +76,7 @@ export const AuthContextProvider = ({ children }) => {
   };
   React.useEffect(() => {
     unsubscribe();
-  }, [user?.user?.user_id]);
+  }, [user?.user?._id]);
 
   return (
     <AuthContext.Provider
