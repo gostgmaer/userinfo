@@ -55,16 +55,16 @@ export default Personal;
 const UserProfile = ({ data, setClose,setProfileInfo }) => {
   const { user,userId } = useAuthContext();
   const [formData, setFormData] = useState({
-    firstName: data.firstName,
+    firstName: data?.firstName,
     lastName: data.lastName,
-    profilePicture: data.profilePicture,
-    contactNumber: data.contactNumber,
+    profilePicture: data?.profilePicture,
+    contactNumber: data?.contactNumber,
     address: {
-      street: data.address.street,
-      city: data.address.city,
-      state: data.address.state,
-      postalCode: data.address.postalCode,
-      country: data.address.country,
+      street: data?.address?.street,
+      city: data?.address?.city,
+      state: data?.address?.state,
+      postalCode: data?.address?.postalCode,
+      country: data?.address?.country,
     },
   });
 
@@ -312,7 +312,7 @@ const UserprofileDetails = ({ userData, setClose }) => {
           <span className="text-gray-800">{userData.role}</span>
         </div>
 
-        {userData.address.city && (
+        {userData?.address?.city && (
           <div className="col-span-2">
             <label className="text-gray-700 font-bold mb-2" htmlFor="address">
               Address:
