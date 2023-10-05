@@ -2,7 +2,7 @@
 import axios from "axios";
 import { notifySuccess, notifyerror } from "./notify/notice";
 import Cookies from "js-cookie";
-
+import { parseCookies, setCookie } from "nookies";
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL; // Replace with your Firebase URL
 
 const axiosInstance = axios.create({
@@ -10,8 +10,10 @@ const axiosInstance = axios.create({
 });
 // axios.defaults.withCredentials=true
 
+const cookies = parseCookies();
+
 export const get = async (endpint, id, query) => {
-  const token = Cookies.get("accessToken");
+  const token = cookies["accessToken"];
 
   let recordID,
     reqUrl = undefined;
@@ -24,7 +26,10 @@ export const get = async (endpint, id, query) => {
   const option = {
     method: "get",
     url: reqUrl,
-    headers: { Authorization: token },
+    headers: {
+      Authorization: cookies["accessToken"],
+      session_id: cookies["sessionID"],
+    },
     params: query,
   };
   let response;
