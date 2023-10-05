@@ -23,6 +23,10 @@ export const AuthContextProvider = ({ children }) => {
         maxAge: 24 * 60 * 60, // 30 days
         path: "/", // The cookie is accessible from the entire site
       });
+      setCookie(null, "session", res.session_id, {
+        maxAge: 24 * 60 * 60, // 30 days
+        path: "/", // The cookie is accessible from the entire site
+      });
       setUser(res);
       setUserId(res.user);
       router.push('/profile')
@@ -63,7 +67,7 @@ export const AuthContextProvider = ({ children }) => {
         setUserId(decodedToken);
 
         if (decodedToken["user_id"]) {
-          const res = await get("/protected");
+          const res = await post("/verify/session");
           setUser(res);
         }
       }

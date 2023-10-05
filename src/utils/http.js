@@ -14,7 +14,7 @@ const cookies = parseCookies();
 
 export const get = async (endpint, id, query) => {
   const token = cookies["accessToken"];
-
+  console.log(cookies);
   let recordID,
     reqUrl = undefined;
   if (recordID) {
@@ -28,7 +28,7 @@ export const get = async (endpint, id, query) => {
     url: reqUrl,
     headers: {
       Authorization: cookies["accessToken"],
-      session_id: cookies["sessionID"],
+      session_id: cookies["session"],
     },
     params: query,
   };
