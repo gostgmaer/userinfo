@@ -35,7 +35,7 @@ const Signup = () => {
     };
 
    try {
-    const res = await post("/signup", body);
+    const res = await post("/user/register", body);
     console.log(res);
    } catch (error) {
     setError(error)

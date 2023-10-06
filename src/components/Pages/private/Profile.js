@@ -14,7 +14,7 @@ const Personal = () => {
   const getProfile = async () => {
    
     try {
-      const res = await get(`/profile/${userId.user_id}`, null, {});
+      const res = await get(`/user/profile/${userId.user_id}`, null, {});
       setProfileInfo(res);
     } catch (error) {
 
@@ -92,10 +92,10 @@ const UserProfile = ({ data, setClose,setProfileInfo }) => {
       },
      
     };
-    const res= await put(`/users`,userId.user_id,recordData)
+    const res= await put(`/user`,userId.user_id,recordData)
     if (res) {
       setClose(true)
-      const userInfoDaa = await get(`/profile/${userId.user_id}`, null, {});
+      const userInfoDaa = await get(`/user/profile/${userId.user_id}`, null, {});
       setProfileInfo(userInfoDaa);
     }
    
