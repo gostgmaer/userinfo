@@ -98,7 +98,10 @@ export const put = async (endpint, id, data) => {
   const option = {
     method: "put",
     url: baseURL + endpint + `/${id}`,
-    headers: {},
+    headers: {
+      Authorization: token,
+      session_id: session,
+    },
     params: {},
     data: data,
   };
