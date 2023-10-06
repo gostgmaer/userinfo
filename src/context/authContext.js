@@ -18,7 +18,7 @@ export const AuthContextProvider = ({ children }) => {
   const router = useRouter();
   const handleLoginAuth = async (body) => {
     try {
-      const res = await post("/signin", body);
+      const res = await post("/user/login", body);
       setCookie(null, "accessToken", res.token, {
         maxAge: 24 * 60 * 60, // 30 days
         path: "/", // The cookie is accessible from the entire site
@@ -40,7 +40,7 @@ export const AuthContextProvider = ({ children }) => {
     }
     try {
       loaderTrue();
-      const res = await post("/signout");
+      const res = await post("/user/signout");
 
       if (res.message === "Success") {
         setAuthenticated(undefined);
@@ -67,7 +67,7 @@ export const AuthContextProvider = ({ children }) => {
         setUserId(decodedToken);
 
         if (decodedToken["user_id"]) {
-          const res = await post("/verify/session");
+          const res = await post("/user/verify/session");
           setUser(res);
         }
       }
