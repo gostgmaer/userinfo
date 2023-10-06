@@ -40,12 +40,12 @@ export const get = async (endpint, id, query) => {
   try {
     response = await axios.request(option);
 
-    if (!endpint.includes("protected")) {
+    if (!endpint.includes("session")) {
       notifySuccess(response.data.message, 2000);
     }
   } catch (e) {
     error = e.response.data;
-    if (!endpint.includes("protected")) {
+    if (!endpint.includes("session")) {
       notifyerror(e.response.data.message, 2000);
     }
 
@@ -78,11 +78,15 @@ export const post = async (endpint, data) => {
   let error;
   try {
     response = await axios.request(option);
-    notifySuccess(response.data.message, 2000);
+    if (!endpint.includes("session")) {
+      notifySuccess(response.data.message, 2000);
+    }
     console.log(response);
   } catch (e) {
     error = e.response.data;
-    notifyerror(e.response.data.message, 2000);
+    if (!endpint.includes("session")) {
+      notifyerror(e.response.data.message, 2000);
+    }
     throw new Error(JSON.stringify(e.response.data));
   }
 
@@ -94,7 +98,10 @@ export const put = async (endpint, id, data) => {
   const option = {
     method: "put",
     url: baseURL + endpint + `/${id}`,
-    headers: {},
+    headers: {
+      Authorization: token,
+      session_id: session,
+    },
     params: {},
     data: data,
   };

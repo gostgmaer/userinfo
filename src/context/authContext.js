@@ -41,8 +41,7 @@ export const AuthContextProvider = ({ children }) => {
     try {
       loaderTrue();
       const res = await post("/user/signout");
-
-      if (res.message === "Success") {
+      if (res.statusCode == "200") {
         setAuthenticated(undefined);
         sessionStorage.removeItem("user");
         deleteCookie("accessToken");
