@@ -1,5 +1,4 @@
 "use client";
-import { getSingleRecord, put } from "@/utils/http";
 import React, { useContext, useState, useEffect } from "react";
 const AppContext = React.createContext(null);
 

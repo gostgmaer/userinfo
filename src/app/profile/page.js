@@ -8,9 +8,11 @@ const Profile = () => {
   // @ts-ignore
   const { user,userId } = useAuthContext();
   const router = useRouter();
+
   useEffect(() => {
-    if (!userId) router.push("/login");
+    if (!userId) router.push("/auth/login");
   }, [userId?.user_id]);
+
   return (
     <Personal/>
   );

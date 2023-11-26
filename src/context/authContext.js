@@ -1,91 +1,143 @@
 "use client";
-import { get, post } from "@/utils/http";
-import { parseCookies, setCookie } from "nookies";
-import React, { useState } from "react";
-import { useGlobalAppContext } from "./context";
-import jwt_decode from "jwt-decode";
+import React, { useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
 
-export const AuthContext = React.createContext({});
+import { setToken } from "@/helper/function";
+import Cookies from "js-cookie";
+import { post } from "@/lib/network/http";
+import jwtDecode from "jwt-decode";
 
-export const useAuthContext = () => React.useContext(AuthContext);
+export const AuthContext = React.createContext(null);
 
 export const AuthContextProvider = ({ children }) => {
-  const { loader, loaderFalse, loaderTrue } = useGlobalAppContext();
   const [user, setUser] = React.useState(undefined);
+  const [authError, setAuthError] = useState(undefined);
   const [userId, setUserId] = useState(null);
-  const [authenticated, setAuthenticated] = useState(undefined);
+
   const router = useRouter();
+
   const handleLoginAuth = async (body) => {
+    // const res = await post("/user/auth/login", body);
+    // console.log(res);
     try {
-      const res = await post("/user/login", body);
-      setCookie(null, "accessToken", res.token, {
-        maxAge: 24 * 60 * 60, // 30 days
-        path: "/", // The cookie is accessible from the entire site
-      });
-      setCookie(null, "session", res.session_id, {
-        maxAge: 24 * 60 * 60, // 30 days
-        path: "/", // The cookie is accessible from the entire site
-      });
-      setUser(res);
-      setUserId({ ...res.user, user_id: res.user._id });
-      router.push("/profile");
-      return res;
+      const res = await post("/user/auth/login", body);
+      if (res.statusCode != 200) {
+        setAuthError(res);
+      } else {
+        const decoded = jwtDecode(res.access_token);
+        const decodedrefersh = jwtDecode(res.refresh_token);
+        setToken(
+          "accessToken",
+          res.access_token,
+          decoded["exp"],
+          "ACCESS_TOKEN"
+        );
+        setToken("refreshToken", res.refresh_token, decodedrefersh["exp"]);
+        setUserId(decoded);
+        setUser(jwtDecode(res.id_token));
+        setAuthError(undefined);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const signout = async () => {
+    try {
+      const res = await post("/user/auth/logout");
+      if (res.statusCode == "200") {
+        router.push("/auth/signin");
+        window.sessionStorage.clear();
+        window.localStorage.clear();
+        const cookies = Cookies.get();
+        for (const cookie in cookies) {
+          Cookies.remove(cookie);
+        }
+        setUser(undefined);
+        setUserId(undefined);
+
+        setAuthError(undefined);
+      } else {
+        setAuthError(res);
+      }
     } catch (error) {}
   };
 
-  const Logout = async () => {
-    function deleteCookie(name) {
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-    }
-    try {
-      loaderTrue();
-      const res = await post("/user/signout");
-      if (res.statusCode == "200") {
-        setAuthenticated(undefined);
-        sessionStorage.removeItem("user");
-        deleteCookie("accessToken");
-        window.sessionStorage.clear();
-        window.localStorage.clear();
-        setUser(undefined);
-        setUserId(undefined);
-      }
-
-      loaderFalse();
-    } catch (error) {
-      loaderFalse();
-    }
-  };
-
   const unsubscribe = async () => {
+    const cookiesData = Cookies.get();
     try {
-      loaderTrue();
-      const cookies = parseCookies();
-      if (cookies.accessToken) {
-        const decodedToken = jwt_decode(cookies.accessToken);
-        setUserId(decodedToken);
+      if (cookiesData["headerPayload"]) {
+        const decodedToken = jwtDecode(
+          cookiesData["headerPayload"] + "." + cookiesData["signature"]
+        );
 
         if (decodedToken["user_id"]) {
-          const res = await post("/user/verify/session");
-          setUser(res);
+          const response = await post("/user/auth/verify/session");
+
+          if (response) {
+         
+            const decoded = jwtDecode(response["accessToken"]);
+            const id = jwtDecode(response["id_token"]);
+
+            setToken(
+              "accessToken",
+              response.accessToken,
+              decoded["exp"],
+              "ACCESS_TOKEN"
+            );
+            setUserId(decoded);
+            setUser(id);
+            setAuthError(undefined);
+          }
         }
       }
-      loaderFalse();
     } catch (error) {
       setUser(undefined);
       setUserId(undefined);
-      loaderFalse();
+      setAuthError(error.message);
     }
   };
+
+  const getToken = async () => {
+    try {
+      const refreshToken = Cookies.get("refreshToken");
+      if (refreshToken) {
+        const res = await post("/user/auth/session/refresh/token", {
+          token: refreshToken,
+        });
+        const decoded = jwtDecode(res.access_token);
+        setToken(
+          "accessToken",
+          res.access_token,
+          decoded["exp"],
+          "ACCESS_TOKEN"
+        );
+        setUserId(decoded);
+      }
+    } catch (error) {
+      setUser(undefined);
+      setUserId(undefined);
+    }
+  };
+
   React.useEffect(() => {
     unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const tokenRefreshInterval = setInterval(getToken, 10 * 60 * 1000);
+
+    return () => clearInterval(tokenRefreshInterval);
+  }, []);
+
   return (
     <AuthContext.Provider
-      value={{ user, handleLoginAuth, authenticated, Logout, userId }}
+      value={{ user, handleLoginAuth, signout, userId, authError }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
+
+export const useAuthContext = () => React.useContext(AuthContext);

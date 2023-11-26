@@ -22,6 +22,10 @@ function Header() {
         </Link>
 
         {/* Navigation */}
+
+        <nav>
+          
+        </nav>
         <nav className="space-x-4">
           {/* My Profile Link */}
           {userId && (
