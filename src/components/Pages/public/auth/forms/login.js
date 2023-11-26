@@ -16,6 +16,7 @@ const LoginForm = () => {
     initialValues: {
       email: "",
       password: "",
+      isremember:"No"
     },
     validationSchema: loginValidationSchema,
     onSubmit: (values) => {
@@ -68,7 +69,9 @@ const LoginForm = () => {
                 <input
                   type="checkbox"
                   className="rizzui-checkbox-input peer disabled:bg-gray-50 disabled:border-gray-200 h-5 w-5 rounded bg-transparent border border-gray-300 checked:!bg-gray-1000 focus:ring-gray-900/30 checked:!border-gray-1000 hover:enabled:border-gray-1000"
-                  name="isRememberMe"
+                  name="isremember"
+                  value={formik.values.isremember}
+                 onChange={formik.handleChange}
                 />
               </span>
               <span className="rizzui-checkbox-label text-sm ml-1.5 rtl:mr-1.5">

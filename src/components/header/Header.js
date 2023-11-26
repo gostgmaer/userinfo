@@ -10,7 +10,7 @@ import { destroyCookie } from "nookies";
 function Header() {
   const { id } = useGlobalAppContext();
   // @ts-ignore
-  const { authenticated,Logout,user,userId } = useAuthContext();
+  const { authenticated,signout,user,userId } = useAuthContext();
   const router = useRouter();
 
   return (
@@ -35,14 +35,14 @@ function Header() {
           )}
           {/* Sign In Button */}
           {!userId && (
-            <Link href={"/login"} className="text-white hover:text-gray-200">
+            <Link href={"/auth/login"} className="text-white hover:text-gray-200">
               Sign In
             </Link>
           )}
           {/* Sign Up Button */}
           {!userId && (
             <Link
-              href={"/register"}
+              href={"/auth/register"}
               className="bg-white text-blue-500 hover:bg-blue-400 hover:text-gray-800 rounded-full py-2 px-6 transition duration-300"
             >
               Sign Up
@@ -50,7 +50,7 @@ function Header() {
           )}
           {userId && (
             <button
-              onClick={Logout}
+              onClick={signout}
               className="bg-red-500 hover:bg-red-400 text-white hover:text-gray-800 rounded-full py-2 px-6 transition duration-300"
             >
               Sign Out
