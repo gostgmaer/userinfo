@@ -9,7 +9,7 @@ import { MdClose } from "react-icons/md";
 
 const Personal = () => {
   const { user,userId } = useAuthContext();
-  const [profileInfo, setProfileInfo] = useState(undefined);
+  const [profileInfo, setProfileInfo] = useState(user);
   const [close, setClose] = useState(true);
 
   const getProfile = async () => {
@@ -21,10 +21,11 @@ const Personal = () => {
 console.log(error);
     }
   };
+  console.log(user);
 
-  useEffect(() => {
-    getProfile();
-  }, [userId?.user_id]);
+  // useEffect(() => {
+  //   getProfile();
+  // }, [userId?.user_id]);
 
   return (
     <div className="container mx-auto py-8 text-black">
@@ -35,17 +36,17 @@ console.log(error);
             width={100}
             height={100}
             property="false"
-            src={profileInfo.result.profilePicture}
+            src={profileInfo}
             style={{ borderRadius: "50%", height: "100px" }}
             alt=""
           />
         )}
       </div>
       {profileInfo && (
-        <UserprofileDetails userData={profileInfo.result} setClose={setClose} />
+        <UserprofileDetails userData={profileInfo} setClose={setClose} />
       )}
       {!close && profileInfo && (
-        <UserProfile data={profileInfo.result} setClose={setClose} setProfileInfo={setProfileInfo} />
+        <UserProfile data={profileInfo} setClose={setClose} setProfileInfo={setProfileInfo} />
       )}
     </div>
   );
