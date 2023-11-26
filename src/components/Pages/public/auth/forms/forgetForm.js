@@ -1,8 +1,8 @@
 // @ts-nocheck
 "use client";
 import { useAuthContext } from "@/context/authContext";
-import { useAxios } from "@/lib/interceptors";
 import { post } from "@/lib/network/http";
+import { useAxios } from "@/lib/network/interceptors";
 import { forgetPasswordValidation } from "@/utils/validationSchema";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
