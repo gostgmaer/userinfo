@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { post } from "@/utils/http";
 import PasswordField from "@/components/global/fields/PasswordField";
+import { post } from "@/lib/network/http";
 const Signup = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({

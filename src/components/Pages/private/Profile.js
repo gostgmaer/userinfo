@@ -1,7 +1,8 @@
 "use client";
 import ImageUpload from "@/components/global/fields/ImageUpload";
 import { useAuthContext } from "@/context/authContext";
-import { get, put } from "@/utils/http";
+import { get, put } from "@/lib/network/http";
+
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";

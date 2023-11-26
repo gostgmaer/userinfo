@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import PasswordField from "@/components/global/fields/PasswordField";
-import { post } from "@/utils/http";
+
 import { useAuthContext } from "@/context/authContext";
 const Login = () => {
   // @ts-ignore
