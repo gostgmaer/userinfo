@@ -41,7 +41,7 @@ const Login = () => {
 
   useEffect(() => {
     if (userId) {
-      router.push('/profile')
+      router.push('/resume-list')
     }
   }, [userId?.user_id]);
 

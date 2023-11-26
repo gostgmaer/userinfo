@@ -17,7 +17,7 @@ const Personal = () => {
       const res = await get(`/user/profile/${userId.user_id}`, null, {});
       setProfileInfo(res);
     } catch (error) {
-
+console.log(error);
     }
   };
 
