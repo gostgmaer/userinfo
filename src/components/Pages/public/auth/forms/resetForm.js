@@ -37,7 +37,7 @@ const ResetForm = () => {
 
   useEffect(() => {
     if (userId) {
-      router.push("/dashboard");
+      router.push("/profile");
     }
   }, [userId]);
 
