@@ -2,23 +2,21 @@
 import ImageUpload from "@/components/global/fields/ImageUpload";
 import { useAuthContext } from "@/context/authContext";
 import { get, put } from "@/lib/network/http";
-
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
 
 const Personal = () => {
-  const { user,userId } = useAuthContext();
+  const { user, userId } = useAuthContext();
   const [profileInfo, setProfileInfo] = useState(user);
   const [close, setClose] = useState(true);
 
   const getProfile = async () => {
-   
     try {
       const res = await get(`/user/profile/${userId.user_id}`, null, {});
       setProfileInfo(res);
     } catch (error) {
-console.log(error);
+      console.log(error);
     }
   };
   console.log(user);
@@ -46,7 +44,11 @@ console.log(error);
         <UserprofileDetails userData={profileInfo} setClose={setClose} />
       )}
       {!close && profileInfo && (
-        <UserProfile data={profileInfo} setClose={setClose} setProfileInfo={setProfileInfo} />
+        <UserProfile
+          data={profileInfo}
+          setClose={setClose}
+          setProfileInfo={setProfileInfo}
+        />
       )}
     </div>
   );
@@ -54,8 +56,8 @@ console.log(error);
 
 export default Personal;
 
-const UserProfile = ({ data, setClose,setProfileInfo }) => {
-  const { user,userId } = useAuthContext();
+const UserProfile = ({ data, setClose, setProfileInfo }) => {
+  const { user, userId } = useAuthContext();
   const [formData, setFormData] = useState({
     firstName: data?.firstName,
     lastName: data.lastName,
@@ -86,21 +88,23 @@ const UserProfile = ({ data, setClose,setProfileInfo }) => {
       profilePicture: imagePreview,
       contactNumber: formData.contactNumber,
       address: {
-        street: formData.street,
-        city: formData.city,
-        state: formData.state,
-        postalCode: formData.postalCode,
-        country: formData.country,
+        street: "",
+        city: "",
+        state: "",
+        postalCode: "",
+        country: "",
       },
-     
     };
-    const res= await put(`/user`,userId.user_id,recordData)
+    const res = await put(`/user`, userId.user_id, recordData);
     if (res) {
-      setClose(true)
-      const userInfoDaa = await get(`/user/profile/${userId.user_id}`, null, {});
+      setClose(true);
+      const userInfoDaa = await get(
+        `/user/profile/${userId.user_id}`,
+        null,
+        {}
+      );
       setProfileInfo(userInfoDaa);
     }
-   
   };
   return (
     <form className="bg-gray-50 p-4 rounded-lg shadow-md">
@@ -381,9 +385,7 @@ const UserprofileDetails = ({ userData, setClose }) => {
   );
 };
 
-
 export async function getServerSideProps(props) {
-
   console.log(props);
   // try {
   // //  const data = await get(`/profile/${user.user.user_id}`, null, {}); // Fetch your data here
@@ -401,5 +403,3 @@ export async function getServerSideProps(props) {
   //   };
   // }
 }
-
-

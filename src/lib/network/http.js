@@ -137,6 +137,34 @@ export const post = async (endpint, data) => {
   return response?.data ? response.data : error; // or set initial value
 };
 
+
+export const getSession = async (endpint, data) => {
+  const cookiesData = Cookies.get();
+  const token = cookiesData["headerPayload"] + "." + cookiesData["signature"];
+  const option = {
+    method: "post",
+    url: baseURL + endpint,
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+    params: {},
+    data: data,
+  };
+  let response;
+  let error;
+  try {
+    response = await instance.request(option);
+  } catch (e) {
+    error = e.response.data;
+
+    // throw new Error(JSON.stringify(e.response));
+  }
+
+  // if success return value
+  return response?.data ? response.data : error; // or set initial value
+};
+
+
 export const patch = async (endpint, data, id) => {
   const cookiesData = Cookies.get();
   const token = cookiesData["headerPayload"] + "." + cookiesData["signature"];

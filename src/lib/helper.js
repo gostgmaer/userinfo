@@ -46,3 +46,7 @@ export function useGetFetcher(endpoint,fetcherData) {
     isError: error,
   };
 }
+
+export const  getObjectFind= (objArray, property, value) =>{
+  return objArray.find(obj => obj[property] === value);
+}
