@@ -1,7 +1,7 @@
-// @ts-nocheck
 "use client";
 import { useAuthContext } from "@/context/authContext";
 import { post } from "@/lib/network/http";
+import { useAxios } from "@/lib/network/interceptors";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
