@@ -1,14 +1,16 @@
 "use client";
 import PasswordField from "@/components/global/fields/PasswordField";
+import { useAuthContext } from "@/context/authContext";
 import { post } from "@/lib/network/http";
 import { registerValidationSchema } from "@/utils/validationSchema";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdArrowForward } from "react-icons/md";
 
 const RegisterForm = () => {
   const [error, setError] = useState(null);
+  const { handleLoginAuth, user, userId, authError } = useAuthContext();
   const router = useRouter();
 
   const handleSubmit = async (values) => {
@@ -40,6 +42,12 @@ const RegisterForm = () => {
       handleSubmit(values);
     },
   });
+  useEffect(() => {
+    if (userId) {
+      router.push("/profile");
+    }
+  
+  }, [userId]);
 
   return (
     <form onSubmit={formik.handleSubmit}>
