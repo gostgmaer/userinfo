@@ -5,9 +5,7 @@ import axios from "axios";
 
 import Cookies from "js-cookie";
 import instance from "./interceptors";
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL; // Replace with your Firebase URL
-
-// axios.defaults.withCredentials=true
+import { baseURL } from "@/config/setting";
 
 export const get = async (endpint, query, id) => {
   const cookiesData = Cookies.get();

@@ -1,7 +1,7 @@
 "use client";
 import ImageUpload from "@/components/global/fields/ImageUpload";
 import { useAuthContext } from "@/context/authContext";
-import { get, put } from "@/lib/network/http";
+import { get, getsingle, patch, put } from "@/lib/network/http";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { MdClose } from "react-icons/md";
@@ -19,7 +19,6 @@ const Personal = () => {
       console.log(error);
     }
   };
-  console.log(user);
 
   // useEffect(() => {
   //   getProfile();
@@ -87,27 +86,24 @@ const UserProfile = ({ data, setClose, setProfileInfo }) => {
       lastName: formData.lastName,
       profilePicture: imagePreview,
       contactNumber: formData.contactNumber,
-      address: {
-        street: "",
-        city: "",
-        state: "",
-        postalCode: "",
-        country: "",
-      },
     };
-    const res = await put(`/user`, userId.user_id, recordData);
+    console.log(userId);
+    const res = await patch(`/users`, recordData, userId["user_id"]);
     if (res) {
       setClose(true);
-      const userInfoDaa = await get(
-        `/user/profile/${userId.user_id}`,
-        null,
+      const userInfoDaa = await getsingle(
+        `/user/auth/profile`,
+        userId.user_id,
         {}
       );
       setProfileInfo(userInfoDaa);
     }
   };
   return (
-    <form className="bg-gray-50 p-4 rounded-lg shadow-md">
+    <form
+      className="bg-gray-50 p-4 rounded-lg shadow-md"
+      onSubmit={UpdateProfile}
+    >
       <div className=" flex justify-between items-center">
         {" "}
         <h2 className="text-2xl font-semibold mb-4">Basic Info</h2>{" "}
